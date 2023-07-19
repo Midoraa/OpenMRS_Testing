@@ -3,6 +3,7 @@ package function;
 import config.WebConnect;
 import model.Account;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Login {
+
     public static List<Account> listInput(){
         List<Account> list = new ArrayList<>();
         for (int i = 1; i < 7; i++) {
@@ -25,18 +27,60 @@ public class Login {
     }
 
     public static void TestLogin() {
-        WebDriver driver = WebConnect.connect();
-        WebElement username = driver.findElement(By.name("username"));
-        username.sendKeys("Admin");
+        int testcase = 1;
+        for (Account l: listInput() ) {
+            WebDriver driver = WebConnect.connect();
+//          Send Value Username
+            WebElement username = driver.findElement(By.name("username"));
+            username.sendKeys(l.getUsername());
+//          Send value Password
+            WebElement password = driver.findElement(By.name("password"));
+            password.sendKeys(l.getPassword());
 
-        WebElement password = driver.findElement(By.name("password"));
-        password.sendKeys("Admin123");
+            String location = "";
+            if(!l.getLocation().equals("1")){
+//          Send value Location
+                String choose = "li[value='" + l.getLocation() + "']";
+                WebElement desiredLocationOption = driver.findElement(By.cssSelector(choose));
+                location =  desiredLocationOption.getText();
+                desiredLocationOption.click();
+            }
+//          Print Test Case
+            System.out.println("Test Case: " + testcase);
+//          Print Username and Password and Location Selected
+            System.out.println("Login Username: " + l.getUsername() + ", Password: "+ l.getPassword() + ", Location: " + location);
 
-        WebElement location = driver.findElement(By.name("sessionLocation"));
-        location.sendKeys("2");
+//          Click on Button Login
+            driver.findElement(By.xpath("//*[@id=\"loginButton\"]")).click();
 
-        driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[3]/button")).click();
+//          Sleep Waiting After Click Login to Waiting Process
+            try { Thread.sleep(5000); } catch (InterruptedException e) { e.printStackTrace(); }
 
-        try { Thread.sleep(5000); } catch (InterruptedException e) { e.printStackTrace(); }
+            if(location.equals("")){
+                String noSelected = driver.findElement(By.xpath("//*[@id=\"login-form\"]/fieldset/p[3]/label")).getText();
+                System.out.println(noSelected);
+            }else {
+//          Test Content Login Success or Fail
+                if (l.getUsername().equals("Admin") && l.getPassword().equals("Admin123")) {
+                    String success = driver.findElement(By.xpath("//*[@id=\"content\"]/div[2]/div/h4")).getText();
+                    System.out.println("Success! " + success);
+                } else {
+                    String alert = driver.findElement(By.xpath("//*[@id=\"error-message\"]")).getText();
+                    System.out.println("Fail! Message: " + alert);
+                }
+
+                Cookie[] cookie = driver.manage().getCookies().toArray(new Cookie[0]);
+                for (Cookie c : cookie
+                ) {
+                    System.out.println("Cookie: " + c);
+
+                }
+            }
+
+            testcase++;
+
+//          Close Tab when test finish
+            driver.quit();
+        }
     }
 }
