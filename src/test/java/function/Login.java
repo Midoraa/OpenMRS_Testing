@@ -24,14 +24,19 @@ public class Login {
         return list;
     }
 
-    public static void TestLogin(){
+    public static void TestLogin() {
         WebDriver driver = WebConnect.connect();
         WebElement username = driver.findElement(By.name("username"));
         username.sendKeys("Admin");
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        WebElement password = driver.findElement(By.name("password"));
+        password.sendKeys("Admin123");
+
+        WebElement location = driver.findElement(By.name("sessionLocation"));
+        location.sendKeys("2");
+
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[3]/button")).click();
+
+        try { Thread.sleep(5000); } catch (InterruptedException e) { e.printStackTrace(); }
     }
 }
