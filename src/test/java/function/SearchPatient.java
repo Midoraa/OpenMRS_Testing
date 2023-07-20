@@ -26,9 +26,10 @@ public class SearchPatient {
         // Click on the desired location option
         desiredLocationOption.click();
 
-        // Get the selected location value
+        // Get the selected location valuee
         String selectedLocation = desiredLocationOption.getText();
         System.out.println("Selected Location: " + selectedLocation);
+
 
         WebElement button =  driver.findElement(By.xpath("//*[@id=\"loginButton\"]"));
         button.click();
