@@ -31,7 +31,7 @@ public class FindPatientRecord {
         // Click on the desired location option
         desiredLocationOption.click();
 
-        // Get the selected location valuee
+        // Get the selected location value
         String selectedLocation = desiredLocationOption.getText();
         System.out.println("Selected Location: " + selectedLocation);
 

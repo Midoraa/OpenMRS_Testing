@@ -1,7 +1,6 @@
 package model;
 
 
-//entity patient
 public class PatientRecord {
     private String id;
     private String name;

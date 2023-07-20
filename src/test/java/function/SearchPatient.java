@@ -74,7 +74,7 @@ public class SearchPatient {
         }
         inputField.clear();
 
-//        Seach by wrong Namee
+//        Seach by wrong Name
         inputField.sendKeys("Hello World It's Me!");
         try {
             Thread.sleep(5000);
